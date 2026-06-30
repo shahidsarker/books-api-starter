@@ -98,20 +98,17 @@ app.get("/api/books/:id", async (request, response, next) => {
 // Part 5: POST a new book
 // TODO: Workshop: swap the manual id/push for the Book method that creates a row
 // directly from req.body. nextId goes away — the database assigns the id now.
-app.post("/api/books", (request, response, next) => {
+app.post("/api/books", async (request, response, next) => {
   try {
-    const { title, author, genre } = request.body;
+    const { title, author, genre, publishedYear } = request.body;
 
-    const newBook = {
-      id: nextId,
+    const newBook = await Book.create({
       title,
       author,
       genre,
+      publishedYear,
       available: true,
-    };
-    nextId++;
-
-    books.push(newBook);
+    });
 
     response.status(201).json(newBook);
   } catch (error) {
