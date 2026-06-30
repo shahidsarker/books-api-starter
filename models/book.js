@@ -16,6 +16,4 @@ const Book = dbConnection.define("Book", {
   available: { type: DataTypes.BOOLEAN, defaultValue: true },
 });
 
-console.log(Book === dbConnection.models.Book);
-
 module.exports = Book;
