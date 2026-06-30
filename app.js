@@ -30,7 +30,10 @@ app.get("/", (request, response) => {
 // TODO: Workshop: swap `books` for the Book method that returns every row.
 app.get("/api/books", async (request, response, next) => {
   try {
-    const books = await Book.findAll();
+    const books = await Book.findAll({
+      // filter by genre if ?genre= query exists
+      where: request.query["genre"] ? { genre: request.query["genre"] } : {},
+    });
     response.json(books);
   } catch (error) {
     next(error);
