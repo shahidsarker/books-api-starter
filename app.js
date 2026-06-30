@@ -140,16 +140,16 @@ app.patch("/api/books/:id", async (request, response, next) => {
 // Part 7: DELETE a book
 // TODO: Workshop: find the book first, same as above, then call the instance
 // method that removes itself — no more findIndex/splice.
-app.delete("/api/books/:id", (request, response, next) => {
+app.delete("/api/books/:id", async (request, response, next) => {
   try {
     const id = Number(request.params.id);
-    const indexToDelete = books.findIndex((b) => b.id === id);
+    const book = await Book.findByPk(id);
 
-    if (indexToDelete === -1) {
+    if (!book) {
       return response.sendStatus(404);
     }
 
-    books.splice(indexToDelete, 1);
+    await book.destroy();
 
     response.sendStatus(204); // 204 No Content — no body on a successful delete
   } catch (error) {
