@@ -111,7 +111,7 @@ app.post("/api/books/:bookId/reviews", async (request, response, next) => {
 app.get("/api/books/:bookId/reviews", async (request, response, next) => {
   try {
     const bookId = Number(request.params.bookId);
-    const reviews = await Review.findAll({ where: { BookId: bookId } });
+    const reviews = await Review.findAll({ where: { bookId: bookId } });
 
     if (!reviews) {
       return response.sendStatus(404);
