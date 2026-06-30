@@ -162,6 +162,25 @@ app.delete("/api/books/:id", async (request, response, next) => {
   }
 });
 
+// DELETE /api/reviews/:id
+
+app.delete("/api/reviews/:id", async (request, response, next) => {
+  try {
+    const id = Number(request.params.id);
+    const review = await Review.findByPk(id);
+
+    if (!review) {
+      return response.sendStatus(404);
+    }
+
+    await review.destroy();
+
+    response.sendStatus(204);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // TODO: Workshop cleanup: once all five routes above use Book instead of `books`,
 // delete the `books` array and `nextId` variable up top — nothing should
 // reference them anymore.
