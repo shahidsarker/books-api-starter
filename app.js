@@ -7,6 +7,7 @@ const db = require("./db");
 db.sync();
 // TODO: Workshop Part 2: import your Book model from ./models/Book once it's defined.
 const Book = require("./models/book");
+const { Op } = require("sequelize");
 
 const app = express();
 const PORT = 8080;
@@ -32,7 +33,12 @@ app.get("/api/books", async (request, response, next) => {
   try {
     const books = await Book.findAll({
       // filter by genre if ?genre= query exists
-      where: request.query["genre"] ? { genre: request.query["genre"] } : {},
+      where: request.query["genre"]
+        ? { genre: request.query["genre"] }
+        : {} && request.query["search"]
+          ? // iLike is case-insensitive in Postgres
+            { title: { [Op.iLike]: `%${request.query["search"]}%` } }
+          : {},
     });
     response.json(books);
   } catch (error) {
