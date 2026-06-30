@@ -6,6 +6,7 @@ const cors = require("cors");
 const db = require("./db");
 db.sync();
 // TODO: Workshop Part 2: import your Book model from ./models/Book once it's defined.
+const Book = require("./models/book");
 
 const app = express();
 const PORT = 8080;
