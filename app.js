@@ -81,15 +81,14 @@ app.get("/api/books", async (request, response, next) => {
 // Part 4: GET one book by id
 // TODO: Workshop: swap `.find()` for the Book method that looks up by primary key.
 // It returns null when nothing matches — your 404 check below still applies.
-app.get("/api/books/:id", (request, response, next) => {
+app.get("/api/books/:id", async (request, response, next) => {
   try {
     const id = Number(request.params.id); // request.params.id is always a string — Number() makes it comparable
-    const book = books.find((b) => b.id === id);
+    const book = await Book.findByPk(id);
 
     if (!book) {
       return response.sendStatus(404);
     }
-
     response.json(book);
   } catch (error) {
     next(error);
