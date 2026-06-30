@@ -107,6 +107,20 @@ app.post("/api/books/:bookId/reviews", async (request, response, next) => {
   }
 });
 
+// GET /api/books/:bookId/reviews
+app.get("/api/books/:bookId/reviews", async (request, response, next) => {
+  try {
+    const bookId = Number(request.params.bookId);
+    const reviews = await Review.findAll({ where: { BookId: bookId } });
+
+    if (!reviews) {
+      return response.sendStatus(404);
+    }
+
+    response.json(reviews);
+  } catch (error) {}
+});
+
 // Part 6: PATCH an existing book — only changes the fields that were sent
 // TODO: Workshop: find the book the same Sequelize way as the GET-one route above,
 // then call the instance method that updates it in place with req.body.
