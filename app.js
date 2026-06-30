@@ -90,8 +90,17 @@ app.post("/api/books", async (request, response, next) => {
 app.post("/api/books/:bookId/reviews", async (request, response, next) => {
   try {
     const bookId = Number(request.params.bookId);
+
+    const book = await Book.findByPk(bookId);
+    if (!book)
+      return response
+        .status(400)
+        .send({ message: `No book associated with ID ${bookId}` });
     const { reviewer, rating, comment } = request.body;
-    console.log(request.body);
+
+    if (!rating || rating > 5 || rating < 1)
+      return response.status(400).send({ message: "Invalid rating" });
+
     const newReview = await Review.create({
       reviewer,
       rating,
