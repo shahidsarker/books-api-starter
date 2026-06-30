@@ -8,7 +8,7 @@ db.sync();
 // TODO: Workshop Part 2: import your Book model from ./models/Book once it's defined.
 
 const { Op } = require("sequelize");
-const { Book } = require("./models");
+const { Book, Review } = require("./models");
 
 const app = express();
 const PORT = 8080;
@@ -53,7 +53,9 @@ app.get("/api/books", async (request, response, next) => {
 app.get("/api/books/:id", async (request, response, next) => {
   try {
     const id = Number(request.params.id); // request.params.id is always a string — Number() makes it comparable
-    const book = await Book.findByPk(id);
+    const book = await Book.findByPk(id, {
+      include: Review,
+    });
 
     if (!book) {
       return response.sendStatus(404);
